@@ -37,10 +37,10 @@ end
 using LinearAlgebra
 
 Alb(x, y) = all(Oct.(x - y, 0))
-makeMatrix(x) =  Hermitian(reshape([makeOct(x[i, :]) for i in 1:9], (3, 3)))
+makeMatrix(x) = Hermitian(reshape([makeOct(x[i, :]) for i in 1:9], (3, 3)))
 
 @testset "Albert" begin
-    @variables x[1:2, 1:9, 1:9]
+    @variables x[1:2, 1:9, 1:8]
 
     a, b = [makeMatrix(x[i, :, :]) for i in 1:2]
     t(x, y) = (x * y + y * x)# / 2
