@@ -3,7 +3,11 @@ using Test
 using Symbolics
 using LinearAlgebra
 
-Oct(x, y) = all(isequal(simplify((x-y).v[i]; expand=true), 0) for i in 1:8)
+# Oct(x, y) = all(isequal(simplify((x-y).v[i]; expand=true), 0) for i in 1:8)
+function Oct(x, y) 
+    z = x-y
+    return all(isequal(simplify(z.v[i]; expand=true), 0) for i in 1:8)
+end
 makeOct(x) = Octonion([Symbolics.scalarize(x[i]) for i in 1:8])
 
 @testset "Octonions" begin
@@ -24,8 +28,11 @@ makeOct(x) = Octonion([Symbolics.scalarize(x[i]) for i in 1:8])
     @test Oct(a * 1, a)
     @test Oct(1 * a, a)
 
-    @test Oct(a * (inv(a) * b), b)
-    @test Oct((b * inv(a)) * a, b)
+    # @test Oct(a * (inv(a) * b), b)
+    # @test Oct((b * inv(a)) * a, b)
+
+    @test Oct(inv(a) * (a * b), b)
+    @test Oct((b * a) * inv(a), b)
 
     @test Oct((a * b * a) * c, a * (b * (a * c))) # left Bol
     @test Oct(c * (a * b * a), ((c * a) * b) * a) # right Bol, redundant due to conj
