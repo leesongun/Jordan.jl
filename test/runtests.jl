@@ -10,27 +10,40 @@ makeOct(x) = Octonion([Symbolics.scalarize(x[i]) for i in 1:8])
     @variables x[1:3, 1:8]
     a, b, c = [makeOct(x[i, :]) for i in 1:3]
 
+    # addition: abelian group
+    # unital magma
+    @test Oct(a + 0, a)
+    @test Oct(0 + a, a)
+
+    @test Oct(-a + a, 0)
+    @test Oct(a + -a, 0)
+
+    @test Oct((a + b) + c, a + (b + c))
+    @test Oct(a + b, b + a)
+
+    # multiplication: Moufang loop
+    @test Oct(a * 1, a)
+    @test Oct(1 * a, a)
+
+    @test Oct(a * (inv(a) * b), b)
+    @test Oct((b * inv(a)) * a, b)
+
+    @test Oct((a * b * a) * c, a * (b * (a * c))) # left Bol
+    @test Oct(c * (a * b * a), ((c * a) * b) * a) # right Bol, redundant due to conj
+    @test Oct(a * (b * c) * a, (a * b) * (c * a)) # Moufang identity
+
+    # conjugation: involutive anti-automorphism
     @test Oct(a, conj(conj(a)))
 
-    @test Oct(a + b, b + a)
+    @test Oct(conj(Octonion(0)), 0)
+    @test Oct(conj(Octonion(1)), 1)
+
+    @test Oct(conj(a) + conj(b), conj(b + a))
     @test Oct(conj(a) * conj(b), conj(b * a))
 
+    # algebra: distributive
     @test Oct((a + b) * c, a * c + b * c)
     @test Oct(a * (b + c), a * b + a * c) # redundant due to conj anti-automorphism
-
-    # Alternative algebra (any 2 generates an associative algebra)
-    @test Oct((a * a) * b, a * (a * b))
-    @test Oct((a * b) * b, a * (b * b))
-
-    # Flexible algebra. This follows from alternativity in case of algebras, which is the case.
-    @test Oct((a * b) * a, a * (b * a))
-
-    # Moufang loop. LHS is well-defined due to flexibility.
-    # These three are equivalent given that any two in the quasigroup generates a group. 
-    # (alternativity, flexibility, holds for inverse)
-    @test Oct((a * b * a) * c, a * (b * (a * c))) # left Bol
-    @test Oct(c * (a * b * a), ((c * a) * b) * a) # right Bol, redundant due to conj anti-automorphism.
-    @test Oct(a * (b * c) * a, (a * b) * (c * a)) # Moufang identity.
 end
 
 Alb(x, y) = all(Oct.(x - y, 0))

@@ -20,6 +20,8 @@ Base.promote_rule(::Type{Octonion{T}}, ::Type{Octonion{S}}) where {T<:Real,S<:Re
 Base.:-(o::Octonion) = Octonion(-o.v)
 Base.real(o::Octonion) = o.v[1]
 Base.conj(o::Octonion) = Octonion(vcat(o.v[1], -o.v[2:8]))
+Base.abs2(o::Octonion) = o.v'o.v
+Base.inv(o::Octonion) = Octonion(conj(o).v ./ abs2(o))
 
 Base.:+(o1::Octonion, o2::Octonion) = Octonion(o1.v + o2.v)
 Base.:-(o1::Octonion, o2::Octonion) = Octonion(o1.v - o2.v)
