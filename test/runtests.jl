@@ -11,7 +11,6 @@ makeOct(x) = Octonion([Symbolics.scalarize(x[i]) for i in 1:8])
     a, b, c = [makeOct(x[i, :]) for i in 1:3]
 
     # addition: abelian group
-    # unital magma
     @test Oct(a + 0, a)
     @test Oct(0 + a, a)
 
@@ -30,7 +29,7 @@ makeOct(x) = Octonion([Symbolics.scalarize(x[i]) for i in 1:8])
 
     @test Oct((a * b * a) * c, a * (b * (a * c))) # left Bol
     @test Oct(c * (a * b * a), ((c * a) * b) * a) # right Bol, redundant due to conj
-    @test Oct(a * (b * c) * a, (a * b) * (c * a)) # Moufang identity
+    @test Oct(a * (b * c) * a, (a * b) * (c * a)) # Moufang identity, redundant
 
     # conjugation: involutive anti-automorphism
     @test Oct(a, conj(conj(a)))
@@ -43,7 +42,7 @@ makeOct(x) = Octonion([Symbolics.scalarize(x[i]) for i in 1:8])
 
     # algebra: distributive
     @test Oct((a + b) * c, a * c + b * c)
-    @test Oct(a * (b + c), a * b + a * c) # redundant due to conj anti-automorphism
+    @test Oct(a * (b + c), a * b + a * c) # redundant due to conj
 end
 
 Alb(x, y) = all(Oct.(x - y, 0))
