@@ -3,6 +3,10 @@ uuid = "21c2b0b6-dfc6-4db9-a733-5580114f69a0"
 authors = ["Songun Lee"]
 version = "0.1.0"
 
+[deps]
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
+
 [compat]
 julia = "1"
 
