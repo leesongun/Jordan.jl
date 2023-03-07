@@ -18,16 +18,19 @@ makeOct(x) = Octonion([Symbolics.scalarize(x[i]) for i in 1:8])
     @test Oct((a + b) * c, a * c + b * c)
     @test Oct(a * (b + c), a * b + a * c) # redundant due to conj anti-automorphism
 
-    # Alternative algebra (any 2 generates associative algebra)
+    # Alternative algebra (any 2 generates an associative algebra)
     @test Oct((a * a) * b, a * (a * b))
     @test Oct((a * b) * b, a * (b * b))
-    @test Oct((a * b) * a, a * (b * a)) # redundant due to distribution law
 
-    # Moufang loop
-    @test Oct((a * (b * a)) * c, a * (b * (a * c))) # left Bol
-    @test Oct(c * ((a * b) * a), ((c * a) * b) * a) # right Bol, redundant due to conj anti-automorphism
-    @test Oct((a * b) * (c * a), (a * (b * c)) * a) # Moufang identity. redundant by definition.
-    @test Oct((a * b) * (c * a), a * ((b * c) * a)) # Moufang identity. redundant by definition and flexibility.
+    # Flexible algebra. This follows from alternativity in case of algebras, which is the case.
+    @test Oct((a * b) * a, a * (b * a))
+
+    # Moufang loop. LHS is well-defined due to flexibility.
+    # These three are equivalent given that any two in the quasigroup generates a group. 
+    # (alternativity, flexibility, holds for inverse)
+    @test Oct((a * b * a) * c, a * (b * (a * c))) # left Bol
+    @test Oct(c * (a * b * a), ((c * a) * b) * a) # right Bol, redundant due to conj anti-automorphism.
+    @test Oct(a * (b * c) * a, (a * b) * (c * a)) # Moufang identity.
 end
 
 Alb(x, y) = all(Oct.(x - y, 0))
